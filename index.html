@@ -3,149 +3,1126 @@
 <!--<html manifest="keyzen.manifest">-->
 <html>
 
-    <head>
-        <title>keyzen</title>
-        <script src="jquery.js"></script>
-        <script src="keyzen.js"></script>
-		<meta charset="UTF-8">
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<head>
+    <title>keyzen</title>
+    <script src="jquery.js"></script>
+    <script src="keyzen.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 
-        <style>
+    <style>
+        @font-face {
+            font-family: 'Roboto Mono';
+            font-style: normal;
+            font-weight: normal;
+            src: url('roboto-mono.woff') format('woff');
+        }
 
-            @font-face {
-              font-family: 'Ubuntu Monokz';
-              font-style: normal;
-              font-weight: normal;
-              src: local('Ubuntu Monokz'), local('UbuntuMono-Regular'), url('ubuntu-mono.woff') format('woff');
-            }
+        body {
+            background-image: url('brushed_alu.png');
+            font-family: 'Roboto Mono', sans-serif;
+            padding: 0;
+            margin: 0;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
 
-            body {
-                background-image: url('brushed_alu.png');
-                font-family: 'Ubuntu Monokz', sans-serif;
-                padding: 0; 
-                margin: 0;
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                -khtml-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;            
-            }
+        #container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
 
-            #container {
-                position: relative;
-                width:100%;
-                height:100%;
-            }
+        #word {
+            color: #444;
+            margin-top: 64px;
+            font-size: 64pt;
+            width: 100%;
+            padding: 0px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            word-wrap: break-word;
+            /* text-shadow: 0px 2px 2px #000; */
+        }
 
-            #word {
-                color: #AAA;
-                position: absolute;
-                top: 50%;
-                margin-top: -64px;
-                height:128px;
-                font-size: 128px;
-                width:100%;
-                padding: 0px;
-                text-align: center;
-                margin-left: auto;
-                margin-right:auto;
-                word-wrap: break-word;
-            	text-shadow: 0px 2px 3px #000;
-            }
-            
-            .keys-hit {
-                color: #CCC;
-                font-size: 128px;
-            	text-shadow: none;
-            }
-            
-            #next-level {
-                height: 2px;
-                background-color: #f78d1d;
-                margin-left: auto;
-                margin-right:auto;
-            }
+        .keys-hit {
+            color: #CCC;
+            font-size: 64pt;
+            text-shadow: none;
+        }
 
-            #level-chars, #layout{
-                font-size: 16px;
-                width:95%;
-                text-align: center;
-                padding-bottom: 16px;
-                margin-left: auto;
-                margin-right:auto;
-                word-wrap: break-word;
-                font-weight: bold;
-                cursor: hand;
-                color: #AAAAAA;
-            }
-            
-            #rigor {
-                font-size: 16px;
-                position: absolute;
-                right: 16px;
-                bottom: 16px;
-                color: #AAA;
-                font-weight: bold;
-                text-align: right;
-            }
+        #next-level {
+            height: 1px;
+            background-color: #f78d1d;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-            #stats {
-                font-size: 16px;
-                position: absolute;
-                left: 16px;
-                bottom: 16px;
-                color: #AAA;
-                font-weight: bold;
-                text-align: right;
-            }
-            
-            #rigor-number {
-                color: #000;
-                cursor: hand;
-            }   
+        #level-chars,
+        #layout {
+            font-size: 10pt;
+            width: 95%;
+            text-align: center;
+            padding-bottom: 16px;
+            margin-left: auto;
+            margin-right: auto;
+            word-wrap: break-word;
+            font-weight: bold;
+            cursor: hand;
+            color: #AAAAAA;
+        }
 
-            .currentChar {
-                border-bottom: 4px solid #f78d1d;
-            }
-            
-            .errorChar {
-                color: #FF0000;
-            }
-            
-            .goodChar {
-                color: #AAAAAA;
-            	text-shadow: 0px 1px 1px #FFF, 0px 2px 2px #FFF;
-            }
-            
-        </style>
+        #rigor {
+            font-size: 10pt;
+            position: absolute;
+            right: 16px;
+            bottom: 16px;
+            color: #AAA;
+            font-weight: bold;
+            text-align: right;
+        }
 
-    </head>
+        #stats {
+            font-size: 10pt;
+            position: absolute;
+            left: 16px;
+            bottom: 16px;
+            color: #AAA;
+            font-weight: bold;
+            text-align: right;
+        }
 
-    <body>
+        #rigor-number {
+            color: #000;
+            cursor: hand;
+        }
 
-        <div id='container'>
+        .currentChar {
+            border-bottom: 4px solid #f78d1d;
+            background-color: white;
+        }
 
-            <div id='layout'>
-            </div>
+        .errorChar {
+            color: #FF0000;
+        }
 
-            <div id='level-chars'>
-            </div>
+        .goodChar {
+            color: #AAAAAA;
+            text-shadow: 0px 1px 1px #FFF, 0px 2px 2px #FFF;
+        }
+    </style>
 
-            <div id='next-level'>
-            </div>
+</head>
 
-            <div id='word'>
-            </div>
-            
-            <div id='rigor'>
-            </div>
+<body>
 
-            <div id="stats">
-            </div>
+    <div id='container'>
 
-        </div>        
+        <div id='layout'>
+        </div>
 
-    </body>
-    
+        <div id='level-chars'>
+        </div>
+
+        <!-- <div id='next-level'>
+        </div> -->
+
+        <div id='word'>
+        </div>
+
+        <div id="keyboard">
+            <style>
+                /**
+                     * graphical keyboard layout, fixed size (690*230px)
+                     */
+
+                ul {
+                    width: 690px;
+                    height: 230px;
+                    padding: 0;
+                    margin: 20px auto;
+                    position: relative;
+                }
+
+
+                /**************************************************************************
+                     * Default Keyboard Geometry (ANSI/101)
+                     */
+
+                /* rows */
+                li {
+                    list-style-type: none;
+                    clear: both;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                #row_AD {
+                    position: absolute;
+                    top: 46px;
+                }
+
+                #row_AC {
+                    position: absolute;
+                    top: 92px;
+                }
+
+                #row_AB {
+                    position: absolute;
+                    top: 138px;
+                }
+
+                #row_AA {
+                    position: absolute;
+                    top: 184px;
+                }
+
+                /* keys */
+                key {
+                    position: relative;
+                    float: left;
+                    clear: none;
+                    width: 40px;
+                    height: 40px;
+                    margin: 2px;
+                    border: 1px solid #aaa;
+                    border-radius: 5px;
+                }
+
+                key * {
+                    font-weight: inherit;
+                    font-style: inherit;
+                    color: #333;
+                }
+
+                key strong {
+                    position: absolute;
+                    top: 2px;
+                    left: 3px;
+                }
+
+                key em {
+                    position: absolute;
+                    bottom: 2px;
+                    left: 3px;
+                }
+
+                key .dk,
+                key .altgr {
+                    left: auto;
+                    right: 5px;
+                    color: blue;
+                    opacity: 0.5;
+                }
+
+                key .dk {
+                    color: red;
+                }
+
+                key .deadKey {
+                    font-weight: bold;
+                    color: red;
+                }
+
+                /* special keys */
+                .specialKey {
+                    background-color: #ddd;
+                }
+
+                .specialKey * {
+                    font-size: 13px;
+                    font-style: italic;
+                }
+
+                #row_AA .specialKey {
+                    width: 56px;
+                }
+
+                #Space {
+                    width: 250px;
+                }
+
+                #Tab {
+                    width: 60px;
+                }
+
+                #Backspace {
+                    width: 86px;
+                }
+
+                #ShiftLeft {
+                    width: 96px;
+                }
+
+                #ShiftRight {
+                    width: 122px;
+                }
+
+                #Escape *,
+                #Tab *,
+                #CapsLock *,
+                #ShiftLeft *,
+                #ShiftRight *,
+                #Enter * {
+                    font-size: 1.25em;
+                    font-style: normal;
+                }
+
+                #ContextMenu *,
+                #Backspace * {
+                    font-style: normal;
+                }
+
+                /* hide LSGT for ANSI (default) */
+                #IntlBackslash,
+                #IntlRo,
+                #IntlYen,
+                #Escape {
+                    display: none;
+                }
+
+
+                /**************************************************************************
+                     * Visual Tweaks for CapsLock and Return
+                     */
+
+                #CapsLockISO,
+                #EnterISO {
+                    background-color: #e8e8e8;
+                    display: block;
+                }
+
+                #CapsLock {
+                    width: 60px;
+                }
+
+                #CapsLock,
+                #Enter {
+                    z-index: 1;
+                }
+
+                #CapsLockISO {
+                    margin-left: -64px;
+                    width: 73px;
+                }
+
+                [shape^="ol"] #CapsLockISO,
+                [shape^="ol"] #EnterISO,
+                [shape^="ansi"] #CapsLockISO,
+                [shape^="ansi"] #EnterISO {
+                    display: none;
+                }
+
+                [shape="ansi"] #CapsLock {
+                    width: 73px;
+                }
+
+                [shape="ansi"] #Enter {
+                    width: 99px;
+                }
+
+                [shape="ansi"] #Backslash {
+                    width: 66px;
+                }
+
+
+                /**************************************************************************
+                     * Alternate Keyboard Geometry (ALT/101)
+                     */
+
+                [shape^="alt"] #IntlYen {
+                    display: block;
+                }
+
+                [shape^="alt"] #Backslash {
+                    display: none;
+                }
+
+                [shape^="alt"] #Backspace {
+                    width: 40px;
+                }
+
+                /* visual tweaks for Return */
+                [shape^="alt"] #Enter {
+                    margin-top: -44px;
+                    margin-left: 35px;
+                    height: 86px;
+                    width: 66px;
+                }
+
+                [shape^="alt"] #EnterISO {
+                    margin-left: -103px;
+                    width: 99px;
+                }
+
+
+                /**************************************************************************
+                     * European Keyboard Geometry (ISO/pc102)
+                     *     + Brazilian Variant (ABNT/pc104)
+                     *     + Japanese Variant (JIS/pc106)
+                     */
+
+                /* visual tweaks for Backslash & Return */
+                [shape^="iso"] #Backslash {
+                    margin-top: 48px;
+                    margin-left: -31px;
+                }
+
+                [shape^="iso"] #Enter {
+                    margin-top: -44px;
+                    margin-left: 48px;
+                    width: 53px;
+                    height: 86px;
+                }
+
+                [shape^="iso"] #EnterISO {
+                    margin-top: -44px;
+                    margin-left: -70px;
+                    width: 66px;
+                }
+
+                /* show IntlBackslash for ISO & ABNT */
+                [shape="iso102"] #ShiftLeft,
+                [shape="iso104"] #ShiftLeft {
+                    width: 50px;
+                }
+
+                [shape="iso102"] #IntlBackslash,
+                [shape="iso104"] #IntlBackslash {
+                    display: block;
+                }
+
+                /* show IntlRo for ABNT & JIS */
+                [shape="iso104"] #ShiftRight,
+                [shape="iso106"] #ShiftRight {
+                    width: 76px;
+                }
+
+                [shape="iso104"] #IntlRo,
+                [shape="iso106"] #IntlRo {
+                    display: block;
+                }
+
+                /* show IntlYen for JIS */
+                [shape="iso106"] #IntlYen {
+                    display: block;
+                }
+
+                [shape="iso106"] #Backspace {
+                    width: 40px;
+                }
+
+
+                /**************************************************************************
+                     * Ortholinear Keyboard Geometry (TypeMatrix, OLKB)
+                     */
+
+                [shape^="ol"] #CapsLock {
+                    display: none;
+                }
+
+                [shape^="ol"] #Backslash {
+                    margin-top: 94px;
+                    margin-left: -105px;
+                }
+
+                [shape^="ol"] #Escape,
+                [shape^="ol"] #Backquote,
+                [shape^="ol"] #Tab,
+                [shape^="ol"] #ShiftLeft,
+                [shape^="ol"] #ControlLeft,
+                [shape^="ol"] #Equal,
+                [shape^="ol"] #BracketRight,
+                [shape^="ol"] #ShiftRight,
+                [shape^="ol"] #ControlRight,
+                [shape^="ol"] #Backspace,
+                [shape^="ol"] #Enter {
+                    width: 55px;
+                }
+
+                [shape^="ol"] #MetaLeft,
+                [shape^="ol"] #AltLeft,
+                [shape^="ol"] #MetaRight,
+                [shape^="ol"] #AltRight {
+                    width: 63px;
+                }
+
+                [shape^="ol"] #ShiftLeft,
+                [shape^="ol"] #ShiftRight {
+                    margin-top: -44px;
+                    height: 86px;
+                }
+
+                /* TypeMatrix-specific (TMx2030) */
+
+                [shape="ol60"] #Space {
+                    width: 239px;
+                }
+
+                [shape="ol60"] #ContextMenu {
+                    width: 40px;
+                }
+
+                [shape="ol60"] #Backquote,
+                [shape="ol60"] #Tab,
+                [shape="ol60"] #ShiftLeft,
+                [shape="ol60"] #ControlLeft {
+                    margin-left: 3px;
+                }
+
+                [shape="ol60"] #KeyA {
+                    margin-left: 64px;
+                    /* XXX why not 63px? */
+                }
+
+                [shape="ol60"] #Digit6,
+                [shape="ol60"] #KeyY,
+                [shape="ol60"] #KeyH,
+                [shape="ol60"] #KeyN {
+                    margin-left: 63px;
+                }
+
+                [shape="ol60"] #Backspace {
+                    margin-left: -396px;
+                    height: 86px;
+                }
+
+                [shape="ol60"] #Enter {
+                    margin-left: -335px;
+                    height: 86px;
+                }
+
+                [shape="ol60"] #ShiftRight {
+                    margin-left: 48px;
+                }
+
+                /* OLKB-specific (Preonic, Planck)*/
+
+                [shape="ol50"],
+                [shape="ol40"] {
+                    width: 590px;
+                    padding: 0 50px;
+                }
+
+                [shape="ol50"] #Escape,
+                [shape="ol40"] #Escape {
+                    display: inline-block;
+                }
+
+                [shape="ol50"] #KeyA,
+                [shape="ol40"] #KeyA {
+                    margin-left: 63px;
+                }
+
+                [shape="ol50"] #Space,
+                [shape="ol40"] #Space {
+                    width: 178px;
+                }
+
+                [shape="ol50"] #Enter,
+                [shape="ol40"] #Enter {
+                    margin-top: -44px;
+                }
+
+                [shape="ol50"] #ContextMenu,
+                [shape="ol40"] #ContextMenu,
+                [shape="ol50"] .pinkyKey,
+                [shape="ol40"] .pinkyKey {
+                    display: none;
+                }
+
+                [shape="ol40"] .numberKey {
+                    display: none;
+                }
+
+                [shape="ol40"] #ShiftLeft,
+                [shape="ol40"] #ShiftRight,
+                [shape="ol40"] #Enter {
+                    margin-top: 2px;
+                    height: 40px;
+                }
+
+                [shape="ol40"] #Escape {
+                    margin-top: 94px;
+                }
+
+                [shape="ol40"] #Backspace {
+                    margin: -90px 523px 0;
+                }
+
+
+                /**************************************************************************
+                     * Special Keys: position & icons
+                     */
+
+                /* text labels on PC (win/linux) */
+                #ControlLeft em::before,
+                #ControlRight em::before {
+                    content: 'Ctrl';
+                }
+
+                #AltLeft em::before {
+                    content: 'Alt';
+                }
+
+                #AltRight em::before {
+                    content: 'AltGr';
+                }
+
+                [platform="win"] #MetaLeft em::before,
+                [platform="win"] #MetaRight em::before {
+                    content: 'Win';
+                }
+
+                [platform="linux"] #MetaLeft em::before,
+                [platform="linux"] #MetaRight em::before {
+                    content: 'Super';
+                }
+
+                /* icon labels on Mac */
+                [platform="mac"] #row_AA em::before {
+                    font-style: normal;
+                }
+
+                [platform="mac"] #ControlLeft em::before,
+                [platform="mac"] #ControlRight em::before {
+                    font-size: 1.2em;
+                    content: '⌃';
+                }
+
+                [platform="mac"] #AltLeft em::before,
+                [platform="mac"] #AltRight em::before {
+                    font-size: 1.2em;
+                    content: '⌥';
+                }
+
+                [platform="mac"] #MetaLeft em::before,
+                [platform="mac"] #MetaRight em::before {
+                    font-size: 1.2em;
+                    content: '⌘';
+                }
+
+                /* swap the Command and Option keys on Mac */
+                [platform="mac"] #MetaLeft,
+                [platform="mac"] #AltRight {
+                    margin-left: 64px;
+                }
+
+                [platform="mac"] #MetaRight,
+                [platform="mac"] #AltLeft {
+                    margin-left: -122px;
+                }
+
+                [platform="mac"][shape^="ol"] #MetaLeft,
+                [platform="mac"][shape^="ol"] #AltRight {
+                    margin-left: 71px;
+                }
+
+                [platform="mac"][shape^="ol"] #MetaRight,
+                [platform="mac"][shape^="ol"] #AltLeft {
+                    margin-left: -136px;
+                }
+
+                /* common key icons */
+                #ShiftLeft em::before,
+                #ShiftRight em::before {
+                    content: '⇧';
+                }
+
+                #CapsLock em::before {
+                    content: '⇪';
+                }
+
+                #Tab em::before {
+                    content: '↹';
+                }
+
+                #Backspace em::before {
+                    content: '⌫';
+                }
+
+                #Escape em::before {
+                    content: '⎋';
+                }
+
+                #Enter em::before {
+                    content: '⏎';
+                }
+
+                /* not really a 'menu' character, but looks like one */
+                #ContextMenu em::before {
+                    content: '☰';
+                }
+
+
+                /**************************************************************************
+                     * Color Theme
+                     */
+
+                [theme="reach"] .pinkyKey {
+                    background-color: hsl(0, 100%, 90%);
+                }
+
+                [theme="reach"] .numberKey {
+                    background-color: hsl(42, 100%, 90%);
+                }
+
+                [theme="reach"] .letterKey {
+                    background-color: hsl(122, 100%, 90%);
+                }
+
+                [theme="reach"] .homeKey {
+                    background-color: hsl(122, 100%, 75%);
+                }
+
+                [theme="hints"] [finger="m1"] {
+                    background-color: hsl(0, 100%, 95%);
+                }
+
+                [theme="hints"] [finger="l2"] {
+                    background-color: hsl(42, 100%, 85%);
+                }
+
+                [theme="hints"] [finger="r2"] {
+                    background-color: hsl(61, 100%, 85%);
+                }
+
+                [theme="hints"] [finger="l3"],
+                [theme="hints"] [finger="r3"] {
+                    background-color: hsl(136, 100%, 85%);
+                }
+
+                [theme="hints"] [finger="l4"],
+                [theme="hints"] [finger="r4"] {
+                    background-color: hsl(200, 100%, 85%);
+                }
+
+                [theme="hints"] [finger="l5"],
+                [theme="hints"] [finger="r5"] {
+                    background-color: hsl(230, 100%, 85%);
+                }
+
+                [theme="hints"] .specialKey {
+                    background-color: #ddd;
+                }
+
+                [theme="hints"] .hint {
+                    font-weight: bold;
+                    background-color: brown;
+                    color: white;
+                }
+
+                .alt em,
+                .alt strong,
+                .dk em,
+                .dk strong {
+                    opacity: 0.25;
+                }
+
+                .alt .altgr,
+                .dk .dk {
+                    opacity: 1;
+                }
+
+                .dk .altgr {
+                    display: none;
+                }
+            </style>
+
+            <ul id="keyboard" shape="ansi" platform="linux" theme="hints">
+                <li id="row_AE">
+                    <key id="Escape" class="specialKey"> <em></em> </key>
+                    <key id="Backquote" finger="l5" class="pinkyKey">
+                        <strong class="">~</strong>
+                        <em class="">`</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Digit1" finger="l5" class="numberKey">
+                        <strong class="">!</strong>
+                        <em class="">1</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Digit2" finger="l4" class="numberKey">
+                        <strong class="">@</strong>
+                        <em class="">2</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Digit3" finger="l3" class="numberKey">
+                        <strong class="">#</strong>
+                        <em class="">3</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Digit4" finger="l2" class="numberKey">
+                        <strong class="">$</strong>
+                        <em class="">4</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Digit5" finger="l2" class="numberKey">
+                        <strong class="">%</strong>
+                        <em class="">5</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Digit6" finger="r2" class="numberKey">
+                        <strong class="">^</strong>
+                        <em class="">6</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Digit7" finger="r2" class="numberKey">
+                        <strong class="">&amp;</strong>
+                        <em class="">7</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Digit8" finger="r3" class="numberKey">
+                        <strong class="">*</strong>
+                        <em class="">8</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Digit9" finger="r4" class="numberKey">
+                        <strong class="">(</strong>
+                        <em class="">9</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Digit0" finger="r5" class="numberKey">
+                        <strong class="">)</strong>
+                        <em class="">0</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Minus" finger="r5" class="pinkyKey">
+                        <strong class="">_</strong>
+                        <em class="">-</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Equal" finger="r5" class="pinkyKey">
+                        <strong class="">+</strong>
+                        <em class="">=</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="IntlYen" finger="r5" class="pinkyKey">
+                        <strong class="">|</strong>
+                        <em class="">\</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Backspace" class="specialKey"> <em></em> </key>
+                </li>
+                <li id="row_AD">
+                    <key id="Tab" class="specialKey"> <em></em> </key>
+                    <key id="KeyQ" finger="l5" class="letterKey">
+                        <strong class="">Q</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyW" finger="l4" class="letterKey">
+                        <strong class="">W</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyE" finger="l3" class="letterKey">
+                        <strong class="">E</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyR" finger="l2" class="letterKey">
+                        <strong class="">R</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyT" finger="l2" class="letterKey">
+                        <strong class="">T</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyY" finger="r2" class="letterKey">
+                        <strong class="">Y</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyU" finger="r2" class="letterKey">
+                        <strong class="">U</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyI" finger="r3" class="letterKey">
+                        <strong class="">I</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyO" finger="r4" class="letterKey">
+                        <strong class="">O</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyP" finger="r5" class="letterKey">
+                        <strong class="">P</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="BracketLeft" finger="r5" class="pinkyKey">
+                        <strong class="">{</strong>
+                        <em class="">[</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="BracketRight" finger="r5" class="pinkyKey">
+                        <strong class="">}</strong>
+                        <em class="">]</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Backslash" finger="r5" class="pinkyKey">
+                        <strong class="">|</strong>
+                        <em class="">\</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                </li>
+                <li id="row_AC">
+                    <key id="CapsLock" class="specialKey"> <em></em> </key>
+                    <key id="CapsLockISO" class="specialKey hiddenKey"> &nbsp; </key>
+                    <key id="KeyA" finger="l5" class="letterKey homeKey">
+                        <strong class="">A</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyS" finger="l4" class="letterKey homeKey">
+                        <strong class="">S</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyD" finger="l3" class="letterKey homeKey">
+                        <strong class="">D</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyF" finger="l2" class="letterKey homeKey">
+                        <strong class="">F</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyG" finger="l2" class="letterKey">
+                        <strong class="">G</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyH" finger="r2" class="letterKey">
+                        <strong class="">H</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyJ" finger="r2" class="letterKey homeKey">
+                        <strong class="">J</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyK" finger="r3" class="letterKey homeKey">
+                        <strong class="">K</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyL" finger="r4" class="letterKey homeKey">
+                        <strong class="">L</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Semicolon" finger="r5" class="letterKey homeKey">
+                        <strong class="">:</strong>
+                        <em class="">;</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Quote" finger="r5" class="pinkyKey">
+                        <strong class="">"</strong>
+                        <em class="">'</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Enter" class="specialKey"> <em></em> </key>
+                    <key id="EnterISO" class="specialKey hiddenKey"> &nbsp; </key>
+                </li>
+                <li id="row_AB">
+                    <key id="ShiftLeft" finger="l5" class="specialKey"> <em></em> </key>
+                    <key id="IntlBackslash" finger="l5" class="pinkyKey">
+                        <strong class="">|</strong>
+                        <em class="">\</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyZ" finger="l5" class="letterKey">
+                        <strong class="">Z</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyX" finger="l4" class="letterKey">
+                        <strong class="">X</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyC" finger="l3" class="letterKey">
+                        <strong class="">C</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyV" finger="l2" class="letterKey">
+                        <strong class="">V</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyB" finger="l2" class="letterKey">
+                        <strong class="">B</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyN" finger="r2" class="letterKey">
+                        <strong class="">N</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="KeyM" finger="r2" class="letterKey">
+                        <strong class="">M</strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Comma" finger="r3" class="letterKey">
+                        <strong class="">&lt;</strong>
+                        <em class="">,</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Period" finger="r4" class="letterKey">
+                        <strong class="">&gt;</strong>
+                        <em class="">.</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="Slash" finger="r5" class="letterKey">
+                        <strong class="">?</strong>
+                        <em class="">/</em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="IntlRo" finger="r5" class="letterKey"></key>
+                    <key id="ShiftRight" finger="r5" class="specialKey"> <em></em> </key>
+                </li>
+                <li id="row_AA">
+                    <key id="ControlLeft" finger="l5" class="specialKey"> <em></em> </key>
+                    <key id="MetaLeft" finger="l1" class="specialKey"> <em></em> </key>
+                    <key id="AltLeft" finger="l1" class="specialKey"> <em></em> </key>
+                    <key id="Space" finger="m1" class="homeKey">
+                        <strong class=""> </strong>
+                        <em class=""></em>
+                        <em class=" altgr"></em>
+                        <em class="dk"></em>
+                        <strong class="dk">
+                        </strong></key>
+                    <key id="AltRight" finger="r1" class="specialKey"> <em></em> </key>
+                    <key id="MetaRight" finger="r1" class="specialKey"> <em></em> </key>
+                    <key id="ContextMenu" finger="r1" class="specialKey"> <em></em> </key>
+                    <key id="ControlRight" finger="r5" class="specialKey"> <em></em> </key>
+                </li>
+            </ul>
+        </div>
+
+        <div id='rigor'>
+        </div>
+
+        <div id="stats">
+        </div>
+
+    </div>
+
+</body>
+
 </html>
