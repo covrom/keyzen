@@ -226,7 +226,7 @@ function render_level_bar() {
         }
     }
     m = Math.floor($('#level-chars-wrap').innerWidth() * Math.min(1.0, m / data.consecutive));
-    // $('#next-level').css({'width': '' + m + 'px'});
+    $('#next-level').css({'width': '' + m + 'px'});
     
 }   
 
