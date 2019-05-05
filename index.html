@@ -19,7 +19,8 @@
         }
 
         body {
-            background-image: url('brushed_alu.png');
+            /* background-image: url('brushed_alu.png'); */
+            background-color: #6491b1;
             font-family: 'Roboto Mono', sans-serif;
             padding: 0;
             margin: 0;
@@ -39,6 +40,7 @@
 
         #word {
             color: #444;
+            background-color: #efefef;
             margin-top: 64px;
             font-size: 64pt;
             width: 100%;
@@ -58,7 +60,7 @@
 
         #next-level {
             height: 1px;
-            background-color: #f78d1d;
+            background-color: #1db1f7;
             margin-left: auto;
             margin-right: auto;
         }
@@ -74,7 +76,7 @@
             word-wrap: break-word;
             font-weight: bold;
             cursor: hand;
-            color: #AAAAAA;
+            color: #444;
         }
 
         #rigor {
@@ -82,7 +84,7 @@
             position: absolute;
             right: 16px;
             bottom: 16px;
-            color: #AAA;
+            color: #444;
             font-weight: bold;
             text-align: right;
         }
@@ -92,7 +94,7 @@
             position: absolute;
             left: 16px;
             bottom: 16px;
-            color: #AAA;
+            color: #444;
             font-weight: bold;
             text-align: right;
         }
@@ -103,17 +105,17 @@
         }
 
         .currentChar {
-            border-bottom: 4px solid #f78d1d;
+            border-bottom: 4px solid #1db1f7;
             background-color: white;
         }
 
         .errorChar {
-            color: #FF0000;
+            color: #ff0000;
         }
 
         .goodChar {
-            color: #AAAAAA;
-            text-shadow: 0px 1px 1px #FFF, 0px 2px 2px #FFF;
+            color: #444;
+            /* text-shadow: 0px 1px 1px #FFF, 0px 2px 2px #FFF; */
         }
     </style>
 
@@ -704,7 +706,7 @@
 
                 [theme="hints"] [finger="l5"],
                 [theme="hints"] [finger="r5"] {
-                    background-color: hsl(230, 100%, 85%);
+                    background-color: hsl(0, 100%, 85%);
                 }
 
                 [theme="hints"] .specialKey {
