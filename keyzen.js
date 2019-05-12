@@ -9,7 +9,7 @@ data.chars = " jfkdlsahgyturieowpqbnvmcxz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQ
 data.consecutive = 5;
 data.word_length = 7;
 data.current_layout = "qwerty";
-layouts={};
+layouts = {};
 layouts["qwerty"] = " jfkdlsahgyturieowpqbnvmcxz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
 layouts["йцукен"] = " оалвдыфрпнегкшущцзйитмьсчя6758493021ё-=хъжэ\\.,/ЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ!\"№;%:?*()_+";
 layouts["L5"] = "1!qazQAZ2@`~";
@@ -21,7 +21,7 @@ layouts["R3"] = "8*iIkK,<";
 layouts["R4"] = "9(oOlL.>";
 layouts["R5"] = "0)-_=+pP[{]};:'\"\\|/?";
 
-$(document).ready(function() {
+$(document).ready(function () {
     if (localStorage.data != undefined) {
         load();
         render();
@@ -53,7 +53,7 @@ function update_stats() {
 
 function set_level(l) {
     data.in_a_row = {};
-    for(var i = 0; i < data.chars.length; i++) {
+    for (var i = 0; i < data.chars.length; i++) {
         data.in_a_row[data.chars[i]] = data.consecutive;
     }
     data.in_a_row[data.chars[l]] = 0;
@@ -68,11 +68,12 @@ function set_level(l) {
 
 function set_layout(l) {
     data.current_layout = l
-	data.chars = layouts[l]
+    data.chars = layouts[l]
     data.in_a_row = {};
-    for(var i = 0; i < data.chars.length; i++) {
+    for (var i = 0; i < data.chars.length; i++) {
         data.in_a_row[data.chars[i]] = data.consecutive;
     }
+    data.level = data.chars.length - 1;
     data.word_index = 0;
     data.word_errors = {};
     data.word = generate_word();
@@ -86,14 +87,14 @@ function keyHandler(e) {
     start_stats();
 
     var key = String.fromCharCode(e.which);
-    if (data.chars.indexOf(key) > -1){
+    if (data.chars.indexOf(key) > -1) {
         e.preventDefault();
     }
     else {
-    	return;
+        return;
     }
     data.keys_hit += key;
-    if(key == data.word[data.word_index]) {
+    if (key == data.word[data.word_index]) {
         hits_correct += 1;
         data.in_a_row[key] += 1;
         (new Audio("click.wav")).play();
@@ -116,15 +117,15 @@ function keyHandler(e) {
     save();
 }
 
-function next_word(){
-	if(get_training_chars().length == 0) {
-		level_up();
-	}
-	data.word = generate_word();
-	data.word_index = 0;
-	data.keys_hit = "";
-	data.word_errors = {};
-	update_stats();
+function next_word() {
+    if (get_training_chars().length == 0) {
+        level_up();
+    }
+    data.word = generate_word();
+    data.word_index = 0;
+    data.keys_hit = "";
+    data.word_errors = {};
+    update_stats();
 
     render();
     save();
@@ -160,17 +161,17 @@ function render() {
 }
 
 function render_layout() {
-	var layouts_html = "<span id='layout'>";
-	for(var layout in layouts){
-		if(data.current_layout == layout){
-			layouts_html += "<span style='color: #1db1f7' onclick='set_layout(\"" + layout + "\");'> "
-		} else {
-		 layouts_html += "<span style='color: #444' onclick='set_layout(\"" + layout + "\");'> "
-		}
-		layouts_html += layout + "</span>";
-	}
-	layouts_html += "</span>";
-	$("#layout").html('Choose layout : ' + layouts_html);
+    var layouts_html = "<span id='layout'>";
+    for (var layout in layouts) {
+        if (data.current_layout == layout) {
+            layouts_html += "<span style='color: #1db1f7' onclick='set_layout(\"" + layout + "\");'> "
+        } else {
+            layouts_html += "<span style='color: #444' onclick='set_layout(\"" + layout + "\");'> "
+        }
+        layouts_html += layout + "</span>";
+    }
+    layouts_html += "</span>";
+    $("#layout").html('Choose layout : ' + layouts_html);
 }
 
 function render_level() {
@@ -178,7 +179,7 @@ function render_level() {
     var level_chars = get_level_chars();
     var training_chars = get_training_chars();
     for (var c in data.chars) {
-        if(training_chars.indexOf(data.chars[c]) != -1) {
+        if (training_chars.indexOf(data.chars[c]) != -1) {
             chars += "<span style='color: #1db1f7' onclick='set_level(" + c + ");'>"
         }
         else if (level_chars.indexOf(data.chars[c]) != -1) {
@@ -224,19 +225,19 @@ function inc_rigor() {
 
 function render_level_bar() {
     training_chars = get_training_chars();
-    if(training_chars.length == 0) {
+    if (training_chars.length == 0) {
         m = data.consecutive;
     }
     else {
         m = 1e100;
-        for(c in training_chars) {
+        for (c in training_chars) {
             m = Math.min(data.in_a_row[training_chars[c]], m);
         }
     }
     m = Math.floor($('#level-chars-wrap').innerWidth() * Math.min(1.0, m / data.consecutive));
-    $('#next-level').css({'width': '' + m + 'px'});
-    
-}   
+    $('#next-level').css({ 'width': '' + m + 'px' });
+
+}
 
 function render_word() {
     var word = "";
@@ -248,17 +249,17 @@ function render_word() {
         else if (i == data.word_index) {
             sclass = "currentChar";
         }
-        else if(data.word_errors[i]) {
+        else if (data.word_errors[i]) {
             sclass = "errorChar";
         }
         else {
             sclass = "goodChar";
         }
         word += "<span class='" + sclass + "'>";
-        if(data.word[i] == " ") {
+        if (data.word[i] == " ") {
             word += "&#9141;"
         }
-        else if(data.word[i] == "&") {
+        else if (data.word[i] == "&") {
             word += "&amp;"
         }
         else {
@@ -267,7 +268,7 @@ function render_word() {
         word += "</span>";
     }
     var keys_hit = "<span class='keys-hit'>";
-    for(var d in data.keys_hit) {
+    for (var d in data.keys_hit) {
         if (data.keys_hit[d] == ' ') {
             keys_hit += "&#9141;";
         }
@@ -278,7 +279,7 @@ function render_word() {
             keys_hit += data.keys_hit[d];
         }
     }
-    for(var i = data.word_index; i < data.word_length; i++) {
+    for (var i = data.word_index; i < data.word_length; i++) {
         keys_hit += "&nbsp;";
     }
     keys_hit += "</span>";
@@ -288,9 +289,9 @@ function render_word() {
 
 function generate_word() {
     word = '';
-    for(var i = 0; i < data.word_length; i++) {
+    for (var i = 0; i < data.word_length; i++) {
         c = choose(get_training_chars());
-        if(c != undefined && c != word[word.length-1]) {
+        if (c != undefined && c != word[word.length - 1]) {
             word += c;
         }
         else {
@@ -308,7 +309,7 @@ function get_level_chars() {
 function get_training_chars() {
     var training_chars = [];
     var level_chars = get_level_chars();
-    for(var x in level_chars) {
+    for (var x in level_chars) {
         if (data.in_a_row[level_chars[x]] < data.consecutive) {
             training_chars.push(level_chars[x]);
         }
