@@ -12,6 +12,14 @@ data.current_layout = "qwerty";
 layouts={};
 layouts["qwerty"] = " jfkdlsahgyturieowpqbnvmcxz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
 layouts["йцукен"] = " оалвдыфрпнегкшущцзйитмьсчя6758493021ё-=хъжэ\\.,/ЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ!\"№;%:?*()_+";
+layouts["L5"] = "1!qazQAZ2@`~";
+layouts["L4"] = "3#wWsSxX";
+layouts["L3"] = "4$eEdDcC";
+layouts["L2"] = "5%6^rRtTfFgGvVbB";
+layouts["R2"] = "7&yYuUhHjJnNmM";
+layouts["R3"] = "8*iIkK,<";
+layouts["R4"] = "9(oOlL.>";
+layouts["R5"] = "0)-_=+pP[{]};:'\"\\|/?";
 
 $(document).ready(function() {
     if (localStorage.data != undefined) {
