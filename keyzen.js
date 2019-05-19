@@ -138,7 +138,7 @@ function next_word() {
 
 function level_up() {
     if (data.level + 1 <= data.chars.length - 1) {
-        (new Audio('ding.wav')).play();
+        // (new Audio('ding.wav')).play();
     }
     l = Math.min(data.level + 1, data.chars.length);
     set_level(l);
