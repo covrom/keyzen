@@ -279,6 +279,18 @@ function render_word() {
         else if (data.keys_hit[d] == '&') {
             keys_hit += "&amp;";
         }
+        else if (data.keys_hit[d] == '"') {
+            keys_hit += "&quot;";
+        }
+        else if (data.keys_hit[d] == '<') {
+            keys_hit += "&lt;";
+        }
+        else if (data.keys_hit[d] == '>') {
+            keys_hit += "&gt;";
+        }
+        else if (data.keys_hit[d] == "'") {
+            keys_hit += "&#39;";
+        }
         else {
             keys_hit += data.keys_hit[d];
         }
