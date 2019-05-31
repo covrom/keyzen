@@ -11,6 +11,7 @@ data.word_length = 7;
 data.current_layout = "qwerty";
 layouts = {};
 layouts["qwerty"] = " jfkdlsahgyturieowpqbnvmcxz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
+layouts["golang"] = " etrniaso0,lcfdu.p()=x1/gm_A:S\"bThE2v{}yRO64I3CPNDMFL8kw5[]79BVUG*H&-!WY\\X+<%z;|>Kq'jQZ`J#^?$@~"
 layouts["йцукен"] = " оалвдыфрпнегкшущцзйитмьсчя6758493021ё-=хъжэ\\.,/ЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ!\"№;%:?*()_+";
 layouts["L5"] = "1!qazQAZ2@`~";
 layouts["L4"] = "3#wWsSxX";
